@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+
+{% block head %}
+<style>
+.daypagesection {
+border: none;
+outline: none;
+resize: none;
+vertical-align: top;
+-webkit-transition: height 0.2s;
+-moz-transition: height 0.2s;
+transition: height 0.2s;
+font-size: 20px;
+background: none;
+}
+
+.daypagesection:focus {
+background: #c3deff;
+}
+</style>
+{% endblock head %}
+
+
+
+
+
+{% block body %}
+
+{% if user %}
+Display the datepicker 
+<br> and the list of todays sections
+<br> jquery to list out the sections
+<br> move them around OR NOT. leave that up to people
+<br> ajax to edit, create, delete etc
+
+{% if sections %}
+{% for section in sections %}
+<form method="post">
+  <input type="hidden" name="sectionid" value="{{ section.key.id }}" />
+  <textarea id="{{ section.key.id }}" class="daypagesection" rows="1"></textarea>
+</form>
+{% endfor %}
+{% endif %}
+
+<form method="post">
+<input type="hidden" name="new" value"new">
+<textarea name="new" class="daypagesection" rows="1" placeholder="Add a new section to your day"></textarea>
+</form>
+
+{% endif %}
+
+{% endblock body %}
+
+
+
+{% block endbody %}
+<script type="text/javascript">
+  $(function(){
+  $('.daypagesection').autosize({append: "\n"});
+/*  $('.daypagesection').autosize(); */
+  });
+</script>
+{% endblock endbody %}
