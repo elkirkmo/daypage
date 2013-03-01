@@ -2,5 +2,7 @@ import webapp2
 from dp.handlers import *
 
 app = webapp2.WSGIApplication([
-    ('/', MainHandler)
+        ('/jsonnewsection', JsonNewSection),
+        ('/jsonupdatesection', JsonUpdateSection),        
+        ('/', MainHandler)
 ], debug=True)

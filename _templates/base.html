@@ -2,6 +2,9 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="/_static/stylesheets/foundation.min.css" />
+    <style>
+      html { background: #292929;   overflow-y: scroll; }
+    </style>
     <script type="text/javascript" src="/_static/javascripts/jquery.js"></script>
     <script type="text/javascript" src="/_static/javascripts/jquery.autosize-min.js" /></script>
     {% block head %}{% endblock head %}
@@ -9,21 +12,15 @@
 
   <body>
     <div class="row">
-      <div class="twelve-columns">
+      <div class="twelve columns">
 	<img src="" style="float: right;"/>
 	<h1>Daypage</h1>
 	
-	<h2>The Simplest Day Ledger Ever</h2>
+	<h2>The Easiest Day Ledger Ever <span style="color: #f00">Under Development</span></h2>
 
 	{% if user %}
 	<p>Hi {{ user.nickname }}. <a href="{{ logout }}">Sign Out</a></p>
 	{% if admin %}
-	<h4>Administrative Pages</h4>
-	<p>
-	  <a href="/">Home</a>
-	<p>
-
-
 	{% endif %}
 
 
@@ -37,10 +34,11 @@
 
 
 	  {% endif %}
-	{% block body %}{% endblock body %}
-
       </div>
-    <div>
+    </div>
+    {% block body %}{% endblock body %}
+
+
     {% block endbody %}{% endblock endbody %}
   </body>
 

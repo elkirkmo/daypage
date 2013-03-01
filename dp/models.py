@@ -6,14 +6,14 @@ class Account(db.Model):
     date_created = db.DateTimeProperty(auto_now_add = True)
     date_edited = db.DateTimeProperty(auto_now = True)
     user = db.UserProperty()
-    
 
 class Section(db.Model):
     date_created = db.DateTimeProperty(auto_now_add = True)
     date_edited = db.DateTimeProperty(auto_now = True)
     date = db.DateProperty(required = True)
-    text = db.TextProperty()
+    content = db.TextProperty()
     order = db.IntegerProperty()
+    user = db.UserProperty()
 
     def initialorder(self):
         self.order = Section.all().filter("date =", self.date).count() + 1
