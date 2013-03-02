@@ -1,0 +1,5 @@
+{% for section in sections %}
+<textarea id="{{ section.key.id }}" class="daypagesection" rows="1" >{{ section.content }}</textarea>
+{% endfor %}
+
+<textarea id="newdaypagesection" rows="1" placeholder="Add something new to your day"></textarea>

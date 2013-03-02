@@ -31,25 +31,26 @@ display: none;
 }
 #search {
 clear: both;
+border: none;
 }
 </style>
 <link rel="stylesheet" href="/_static/stylesheets/daypage-theme/jquery-ui-1.10.1.custom.css" />
 <script src="/_static/javascripts/jquery-ui-1.10.1.custom.min.js"></script>
-<script>
-  $(function() {
-    $( "#datepicker" ).datepicker();
-  });
-  </script>
 {% endblock head %}
 
 {% block body %}
-<div class="row">
 
-<div class="nine columns" id="sectionwrapper">
+<div class="row">
+  <div class="twelve columns">
+    <h3 id="thisday">{% now "F jS, Y" %}</h3>
+    <input type="text" placeholder="Search (TBD)" id="search"/>    
+  </div>
+</div>
+
+<div class="row">
+<div class="nine columns" id="sectioncrib">
 
 {% if user %}
-<h3 id="currentdate">{% now "F jS, Y" %}</h3>
-
 {% if sections %}
 {% for section in sections %}
 <textarea id="{{ section.key.id }}" class="daypagesection" rows="1" >{{ section.content }}</textarea>
@@ -63,7 +64,6 @@ clear: both;
 <div class="three columns">
 <input type="text" id="datepickeroutput" />
 <div id="datepicker" ></div>
-<input type="text" placeholder="Search" id="search"/>
 </div>
 
 {% endif %}
@@ -73,10 +73,12 @@ clear: both;
 
 {% block endbody %}
 <script type="text/javascript">
+
+  var thisday = new Date();
+
   $(document).ready(function() {
 
-  var today = new Date();
-  $('#currentdate').html( today.getMonth()+1 + "/" + today.getDate() + "/" + today.getFullYear() );
+  $('#thisday').html( thisday.getMonth()+1 + "/" + thisday.getDate() + "/" + thisday.getFullYear() );
 
   $('.daypagesection, #newdaypagesection').autosize({append: "\n"});
 /*  $('.daypagesection').each( function(index) {
@@ -84,11 +86,10 @@ clear: both;
      }); */
 
 /* CREATE NEW SECTION */
-$('#sectionwrapper').on('blur', '#newdaypagesection', function(event) {
-  var currentdate = new Date();
-  var year = currentdate.getFullYear();
-  var month = currentdate.getMonth();
-  var day = currentdate.getDate();
+$('#sectioncrib').on('blur', '#newdaypagesection', function(event) {
+  var year = thisday.getFullYear();
+  var month = thisday.getMonth() + 1;
+  var day = thisday.getDate();
   var content = $(event.target).val();
   var datatosend = {year: year, month: month, day: day, content: content };
   $.post("/jsonnewsection", datatosend, 
@@ -97,28 +98,36 @@ $('#sectionwrapper').on('blur', '#newdaypagesection', function(event) {
             $(event.target).attr("id", data.sectionid);
             $(event.target).attr("class", "daypagesection");
             $(event.target).attr("placeholder", "");
-            $(event.target).parent().append("<textarea id='newdaypagesection' rows=1 placeholder='Add something new to your day'></textarea>").fadeIn('slow');
+            $(event.target).parent().append("<textarea id='newdaypagesection' rows=1 placeholder='Add something new to your day'></textarea>").fadeIn('250');
          }
          }, 'json');
 });
 
 /* UPDATE SECTION */
-$('#sectionwrapper').on('blur', '.daypagesection', function(event) {
+$('#sectioncrib').on('blur', '.daypagesection', function(event) {
   var sectionid = $(event.target).attr("id");
   var content = $(event.target).val();
   var datatosend = {sectionid: sectionid, content: content};
   $.post("/jsonupdatesection", datatosend, 
       function(data){
          if (data.response == "0"){
-             $(event.target).hide('fast', function(){ $(event.target).remove()});
+  $(event.target).fadeOut('250', function(){ $(event.target).remove()});
          }
          }, 'json' );
 });
 
 $('#search').blur(function() {
-  var currentdate = new Date();
-  alert( currentdate.toUTCString() );
+  var thisday = new Date();
+  alert( thisday.toUTCString() );
 });
+
+  $( "#datepicker" ).datepicker({
+  onSelect: function(selectedDate){
+    $('#thisday').html(selectedDate);
+    $('#sectioncrib').empty();
+    $('#sectioncrib').load('/ajaxloadsections', {"datestring": selectedDate}).fadeIn('500');
+  }
+  });
 
   }); /* document.ready */
 

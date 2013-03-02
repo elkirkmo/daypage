@@ -12,5 +12,22 @@ indexes:
 
 - kind: Section
   properties:
+  - name: date
+  - name: order
+
+- kind: Section
+  properties:
+  - name: date
+  - name: user
+  - name: order
+
+- kind: Section
+  properties:
+  - name: date=
+  - name: user=
+  - name: order
+
+- kind: Section
+  properties:
   - name: user
   - name: order

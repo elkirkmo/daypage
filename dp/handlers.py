@@ -41,13 +41,27 @@ class MainHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
         today = datetime.date.today()
-        sections = Section.all().filter("user =", user).order("order").run()
+        sections = Section.all().filter("date =", today).order("order").run()
         values = {
             "user": user,
             "today": today,
             "sections": sections,
             }
         render(self, 'home.html', values)
+
+class AjaxLoadSections(webapp2.RequestHandler):
+    '''datestring, mm/dd/yyyy'''
+    def post(self):
+        user = users.get_current_user()
+        month, day, year = self.request.get("datestring").split("/")
+        thisday = datetime.date(int(year), int(month), int(day))
+        sections = Section.all().filter("date =", thisday).order("order").run()
+        values = {
+            "response": 1,
+            "sections": sections,
+            "user": user,
+            }
+        render(self, "_loadsections.html", values)
 
 class JsonNewSection(webapp2.RequestHandler):
     ''' content, year, month, day '''
@@ -91,5 +105,16 @@ class JsonUpdateSection(webapp2.RequestHandler):
         renderjson(self, values)
 
 class JsonGetSections(webapp2.RequestHandler):
-    def get(self, currentdate):
-        pass
+    '''year, month, day'''
+    def post(self):
+        user = users.get_current_user()
+        year = int(self.request.get("year"))
+        month = int(self.request.get("month"))
+        day = int(self.request.get("day"))
+        thisday = datetime.date(year, month, day),
+        sections = Section.all().filter("user =", user).filter("date =", thisday).run()
+        values = {
+            "response": 1,
+            "sections": sections
+            }
+        renderjson(self, values)
