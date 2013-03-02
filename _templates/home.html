@@ -71,6 +71,10 @@ border: none;
 </div>
 {% endblock body %}
 
+
+
+
+
 {% block endbody %}
 <script type="text/javascript">
 
@@ -80,10 +84,11 @@ border: none;
 
   $('#thisday').html( thisday.getMonth()+1 + "/" + thisday.getDate() + "/" + thisday.getFullYear() );
 
+function autoSize(){
   $('.daypagesection, #newdaypagesection').autosize({append: "\n"});
-/*  $('.daypagesection').each( function(index) {
-     $(this).val($(this).val()+'\n').trigger('autosize');
-     }); */
+}
+
+autoSize();
 
 /* CREATE NEW SECTION */
 $('#sectioncrib').on('blur', '#newdaypagesection', function(event) {
@@ -99,6 +104,7 @@ $('#sectioncrib').on('blur', '#newdaypagesection', function(event) {
             $(event.target).attr("class", "daypagesection");
             $(event.target).attr("placeholder", "");
             $(event.target).parent().append("<textarea id='newdaypagesection' rows=1 placeholder='Add something new to your day'></textarea>").fadeIn('250');
+            autoSize();
          }
          }, 'json');
 });
@@ -111,7 +117,7 @@ $('#sectioncrib').on('blur', '.daypagesection', function(event) {
   $.post("/jsonupdatesection", datatosend, 
       function(data){
          if (data.response == "0"){
-  $(event.target).fadeOut('250', function(){ $(event.target).remove()});
+             $(event.target).fadeOut('250', function(){ $(event.target).remove()});
          }
          }, 'json' );
 });
