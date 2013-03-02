@@ -24,8 +24,8 @@ background: #d3deff;
 }
 
 #datepicker {
-min-height: 265px;
 }
+
 #datepickeroutput {
 display: none;
 }
@@ -42,23 +42,13 @@ border: none;
 
 <div class="row">
   <div class="twelve columns">
-    <h3 id="thisday">{% now "F jS, Y" %}</h3>
+    <h3 id="thisday"></h3>
     <input type="text" placeholder="Search (TBD)" id="search"/>    
   </div>
 </div>
 
 <div class="row">
 <div class="nine columns" id="sectioncrib">
-
-{% if user %}
-{% if sections %}
-{% for section in sections %}
-<textarea id="{{ section.key.id }}" class="daypagesection" rows="1" >{{ section.content }}</textarea>
-{% endfor %}
-{% endif %}
-
-<textarea id="newdaypagesection" rows="1" placeholder="Add something new to your day"></textarea>
-
 </div>
 
 <div class="three columns">
@@ -66,7 +56,7 @@ border: none;
 <div id="datepicker" ></div>
 </div>
 
-{% endif %}
+
 </div>
 </div>
 {% endblock body %}
@@ -82,7 +72,10 @@ border: none;
 
   $(document).ready(function() {
 
-  $('#thisday').html( thisday.getMonth()+1 + "/" + thisday.getDate() + "/" + thisday.getFullYear() );
+  var datestring =  thisday.getMonth()+1 + "/" + thisday.getDate() + "/" + thisday.getFullYear();
+  $('#thisday').html(datestring);
+  $('#sectioncrib').load('/ajaxloadsections', {"datestring": datestring});
+  setTimeout(autoSize, 500);
 
 function autoSize(){
   $('.daypagesection, #newdaypagesection').autosize({append: "\n"});
@@ -130,8 +123,10 @@ $('#search').blur(function() {
   $( "#datepicker" ).datepicker({
   onSelect: function(selectedDate){
     $('#thisday').html(selectedDate);
+    thisday = new Date(selectedDate);
     $('#sectioncrib').empty();
-    $('#sectioncrib').load('/ajaxloadsections', {"datestring": selectedDate}).fadeIn('500');
+    $('#sectioncrib').load('/ajaxloadsections', {"datestring": selectedDate}, function(){ autoSize(); });
+/*    setTimeout(autoSize, 200); */
   }
   });
 

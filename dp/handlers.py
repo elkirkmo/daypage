@@ -40,14 +40,14 @@ def renderjson(self, values):
 class MainHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
-        today = datetime.date.today()
-        sections = Section.all().filter("date =", today).order("order").run()
+        if user:
+            template = "home.html"
+        else:
+            template = "landing.html"
         values = {
             "user": user,
-            "today": today,
-            "sections": sections,
             }
-        render(self, 'home.html', values)
+        render(self, template, values)
 
 class AjaxLoadSections(webapp2.RequestHandler):
     '''datestring, mm/dd/yyyy'''
