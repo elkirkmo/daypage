@@ -4,7 +4,7 @@
 {% block head %}
 <style>
 #newdaypagesection, .daypagesection {
-border: none;
+border: 1px #2BBFBD solid;
 outline: none;
 resize: none;
 vertical-align: top;
@@ -13,10 +13,14 @@ vertical-align: top;
 transition: height 0.2s;
 font-size: 20px;
 background: none;
+min-height: 100px;
 }
 
 #newdaypagesection:focus, .daypagesection:focus {
 background: #d3deff;
+}
+
+#newdaypagesection {
 }
 
 #datepicker {
@@ -29,21 +33,26 @@ display: none;
 clear: both;
 }
 </style>
-<script type="text/javascript" src="/_static/javascripts/zebra_datepicker.js"></script>
-<link rel="stylesheet" href="/_static/stylesheets/zebra_datepicker.css" type="text/css">
+<link rel="stylesheet" href="/_static/stylesheets/daypage-theme/jquery-ui-1.10.1.custom.css" />
+<script src="/_static/javascripts/jquery-ui-1.10.1.custom.min.js"></script>
+<script>
+  $(function() {
+    $( "#datepicker" ).datepicker();
+  });
+  </script>
 {% endblock head %}
 
 {% block body %}
 <div class="row">
 
-<div class="nine columns">
+<div class="nine columns" id="sectionwrapper">
 
 {% if user %}
 <h3 id="currentdate">{% now "F jS, Y" %}</h3>
 
 {% if sections %}
 {% for section in sections %}
-<textarea id="{{ section.key.id }}" class="daypagesection" rows="1">{{ section.content }}</textarea>
+<textarea id="{{ section.key.id }}" class="daypagesection" rows="1" >{{ section.content }}</textarea>
 {% endfor %}
 {% endif %}
 
@@ -64,36 +73,46 @@ clear: both;
 
 {% block endbody %}
 <script type="text/javascript">
+  $(document).ready(function() {
 
-  $(function(){
-  $('.daypagesection, #newdaypagesection').autosize({append: "\n"});
-/*  $('.daypagesection').autosize(); */
-  });
-
-  $(function(){
   var today = new Date();
   $('#currentdate').html( today.getMonth()+1 + "/" + today.getDate() + "/" + today.getFullYear() );
-  });
-  
-  $(document).ready(function() {
-  $('input#datepickeroutput').Zebra_DatePicker({
-    always_visible: $('#datepicker'),
-    always_show_clear: false,
-  });
 
-$('#newdaypagesection').blur(function(event) {
+  $('.daypagesection, #newdaypagesection').autosize({append: "\n"});
+/*  $('.daypagesection').each( function(index) {
+     $(this).val($(this).val()+'\n').trigger('autosize');
+     }); */
+
+/* CREATE NEW SECTION */
+$('#sectionwrapper').on('blur', '#newdaypagesection', function(event) {
   var currentdate = new Date();
   var year = currentdate.getFullYear();
   var month = currentdate.getMonth();
   var day = currentdate.getDate();
   var content = $(event.target).val();
-  var sectionid = $.getJSON("/jsonnewsection?year="+year+"&month="+month+"&day="+day+"&content="+content, function(data) { alert(content); })
+  var datatosend = {year: year, month: month, day: day, content: content };
+  $.post("/jsonnewsection", datatosend, 
+      function(data){
+         if (data.response == "1"){
+            $(event.target).attr("id", data.sectionid);
+            $(event.target).attr("class", "daypagesection");
+            $(event.target).attr("placeholder", "");
+            $(event.target).parent().append("<textarea id='newdaypagesection' rows=1 placeholder='Add something new to your day'></textarea>").fadeIn('slow');
+         }
+         }, 'json');
 });
 
-$('.daypagesection').blur(function(event) {
+/* UPDATE SECTION */
+$('#sectionwrapper').on('blur', '.daypagesection', function(event) {
   var sectionid = $(event.target).attr("id");
   var content = $(event.target).val();
-  var sectionid = $.getJSON("/jsonupdatesection?sectionid="+sectionid+"&content="+content, function(data) { alert(data); })
+  var datatosend = {sectionid: sectionid, content: content};
+  $.post("/jsonupdatesection", datatosend, 
+      function(data){
+         if (data.response == "0"){
+             $(event.target).hide('fast', function(){ $(event.target).remove()});
+         }
+         }, 'json' );
 });
 
 $('#search').blur(function() {
@@ -102,6 +121,6 @@ $('#search').blur(function() {
 });
 
   }); /* document.ready */
-  
+
 </script>
 {% endblock endbody %}

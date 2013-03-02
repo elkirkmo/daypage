@@ -41,7 +41,7 @@ class MainHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
         today = datetime.date.today()
-        sections = Section.all().filter("user =", user).run()
+        sections = Section.all().filter("user =", user).order("order").run()
         values = {
             "user": user,
             "today": today,
@@ -50,9 +50,12 @@ class MainHandler(webapp2.RequestHandler):
         render(self, 'home.html', values)
 
 class JsonNewSection(webapp2.RequestHandler):
-    ''' currentdate, year, month, day '''
-    def get(self):
+    ''' content, year, month, day '''
+    def post(self):
         user = users.get_current_user()
+        content = self.request.get("content")
+        if content == "":
+            return renderjson(self, {"response": 2})
         year = int(self.request.get("year"))
         month = int(self.request.get("month"))
         day = int(self.request.get("day"))
@@ -64,19 +67,26 @@ class JsonNewSection(webapp2.RequestHandler):
         section.initialorder()
         section.put()
         values = {
+            "response": 1,
             "sectionid": section.key().id()
             }
         renderjson(self, values)
 
 class JsonUpdateSection(webapp2.RequestHandler):
     ''' sectionid, content, user '''
-    def get(self):
+    def post(self):
         user = users.get_current_user()
         section = Section.get_by_id(int(self.request.get("sectionid")))
-        section.content = self.request.get("content")
-        section.put()
+        newcontent = self.request.get("content")
+        if newcontent == "":
+            section.delete()
+            response = 0
+        else:
+            section.content = newcontent
+            section.put()
+            response = 1
         values = {
-            "success": 1,
+            "response": response,
             }
         renderjson(self, values)
 

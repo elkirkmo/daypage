@@ -16,7 +16,7 @@
 	<img src="" style="float: right;"/>
 	<h1>Daypage</h1>
 	
-	<h2>The Easiest Day Ledger Ever <span style="color: #f00">Under Development</span></h2>
+	<h2>The Easiest Day Ledger Ever <span style="color: #F22E2E">Under Development</span></h2>
 
 	{% if user %}
 	<p>Hi {{ user.nickname }}. <a href="{{ logout }}">Sign Out</a></p>
@@ -40,6 +40,19 @@
 
 
     {% block endbody %}{% endblock endbody %}
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-38960400-1']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
   </body>
 
 </html>
