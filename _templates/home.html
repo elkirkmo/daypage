@@ -43,21 +43,24 @@ border: none;
 <div class="row">
   <div class="twelve columns">
     <h3 id="thisday"></h3>
-    <input type="text" placeholder="Search (TBD)" id="search"/>    
+    <input type="text" placeholder="Search (forthcoming)" id="search"/>    
   </div>
 </div>
 
 <div class="row">
-<div class="nine columns" id="sectioncrib">
-</div>
 
-<div class="three columns">
-<input type="text" id="datepickeroutput" />
-<div id="datepicker" ></div>
-</div>
+  <div class="nine columns" id="sectioncrib">
+  </div>
 
+  <div class="three columns">
+    <input type="text" id="datepickeroutput" />
+    <div id="datepicker" ></div>
+    <h4>Instructions</h4>
+    <p>Pick a day</p>
+    <p>Type your notes</p>
+    <p>Click away to save <br>(autosave coming)</p>
+  </div>
 
-</div>
 </div>
 {% endblock body %}
 
@@ -68,20 +71,20 @@ border: none;
 {% block endbody %}
 <script type="text/javascript">
 
+  function autoSize(){
+     $('.daypagesection, #newdaypagesection').autosize({append: "\n"});
+  }
+
   var thisday = new Date();
 
   $(document).ready(function() {
 
   var datestring =  thisday.getMonth()+1 + "/" + thisday.getDate() + "/" + thisday.getFullYear();
   $('#thisday').html(datestring);
-  $('#sectioncrib').load('/ajaxloadsections', {"datestring": datestring});
-  setTimeout(autoSize, 500);
-
-function autoSize(){
-  $('.daypagesection, #newdaypagesection').autosize({append: "\n"});
-}
-
-autoSize();
+  $('#sectioncrib').empty();
+  $('#sectioncrib').load('/ajaxloadsections', {"datestring": datestring}, function(){ 
+       autoSize();
+     });
 
 /* CREATE NEW SECTION */
 $('#sectioncrib').on('blur', '#newdaypagesection', function(event) {
@@ -121,6 +124,8 @@ $('#search').blur(function() {
 });
 
   $( "#datepicker" ).datepicker({
+  showOtherMonths: true,
+  selectOtherMonths: true,
   onSelect: function(selectedDate){
     $('#thisday').html(selectedDate);
     thisday = new Date(selectedDate);
@@ -130,7 +135,7 @@ $('#search').blur(function() {
   }
   });
 
-  }); /* document.ready */
+  }); /* end document.ready */
 
 </script>
 {% endblock endbody %}
