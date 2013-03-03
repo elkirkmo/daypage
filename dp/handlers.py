@@ -55,7 +55,7 @@ class AjaxLoadSections(webapp2.RequestHandler):
         user = users.get_current_user()
         month, day, year = self.request.get("datestring").split("/")
         thisday = datetime.date(int(year), int(month), int(day))
-        sections = Section.all().filter("date =", thisday).order("order").run()
+        sections = Section.all().filter("date =", thisday).filter("user =", user).order("order").run()
         values = {
             "response": 1,
             "sections": sections,
