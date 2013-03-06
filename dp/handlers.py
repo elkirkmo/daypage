@@ -80,6 +80,9 @@ class JsonNewSection(webapp2.RequestHandler):
             )
         section.initialorder()
         section.put()
+        record = SiteRecord.all().get()
+        record.sectionscreated += 1
+        record.put()
         values = {
             "response": 1,
             "sectionid": section.key().id()
@@ -92,13 +95,17 @@ class JsonUpdateSection(webapp2.RequestHandler):
         user = users.get_current_user()
         section = Section.get_by_id(int(self.request.get("sectionid")))
         newcontent = self.request.get("content")
+        record = SiteRecord.all().get()
         if newcontent == "":
             section.delete()
             response = 0
+            record.sectionsdeleted += 1
         else:
             section.content = newcontent
             section.put()
             response = 1
+            record.sectionedits += 1
+        record.put()
         values = {
             "response": response,
             }
@@ -118,3 +125,9 @@ class JsonGetSections(webapp2.RequestHandler):
             "sections": sections
             }
         renderjson(self, values)
+
+class Maintain(webapp2.RequestHandler):
+    def get(self):
+        if not users.is_current_user_admin():
+            return self.response.out.write("Sorry, not admin")
+        self.response.out.write("Complete")

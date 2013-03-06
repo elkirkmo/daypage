@@ -17,3 +17,8 @@ class Section(db.Model):
 
     def initialorder(self):
         self.order = Section.all().filter("date =", self.date).count() + 1
+
+class SiteRecord(db.Model):
+    sectionscreated = db.IntegerProperty()
+    sectionsdeleted = db.IntegerProperty()
+    sectionedits = db.IntegerProperty()
