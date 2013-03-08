@@ -42,7 +42,6 @@ border: none;
 
 <div class="row">
   <div class="twelve columns">
-    <h3 id="thisday"></h3>
     <input type="text" placeholder="Search (forthcoming)" id="search"/>    
   </div>
 </div>
@@ -53,6 +52,7 @@ border: none;
   </div>
 
   <div class="three columns">
+    <h4 id="thisday"></h4>
     <input type="text" id="datepickeroutput" />
     <div id="datepicker" ></div>
     <h4>Instructions</h4>
@@ -120,15 +120,15 @@ $('#sectioncrib').on('blur', '.daypagesection', function(event) {
 
 $('#search').blur(function() {
   var thisday = new Date();
-  alert( thisday.toUTCString() );
 });
 
   $( "#datepicker" ).datepicker({
   showOtherMonths: true,
   selectOtherMonths: true,
   onSelect: function(selectedDate){
-    $('#thisday').html(selectedDate);
     thisday = new Date(selectedDate);
+    var datestring =  thisday.getMonth()+1 + "/" + thisday.getDate() + "/" + thisday.getFullYear();
+    $('#thisday').html(datestring);
     $('#sectioncrib').empty();
     $('#sectioncrib').load('/ajaxloadsections', {"datestring": selectedDate}, function(){ autoSize(); });
 /*    setTimeout(autoSize, 200); */

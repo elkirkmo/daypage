@@ -1,4 +1,4 @@
-import os, webapp2, json, datetime
+import os, webapp2, json, datetime, random
 from models import *
 from google.appengine.api import users
 from google.appengine.ext.webapp import template
@@ -7,11 +7,20 @@ from google.appengine.ext import db
 providers = {
     'Google'   : 'https://www.google.com/accounts/o8/id',
     'Yahoo'    : 'yahoo.com',
-    'MySpace'  : 'myspace.com',
-    'AOL'      : 'aol.com',
     'MyOpenID' : 'myopenid.com'
     # add more here
 }
+taglines = [
+    'Blogs are big, Daypage is small.',
+    'Web Journaling that doesn\'t hurt.',
+    'Daypage is a day-centric note taking platform, as opposed to a note-centric day taking platform.',
+    'Blogging without all the fuss.',
+    'You deserve day tracking this simple.',
+    'Blogging without the fluff, an actual web log.',
+    'What a Star Captain would use.',
+    'It\'s actually fun! - Conrad Frame',
+    'Some things are horrible; Daypage is not one of those things.',
+    ]
 
 #render(self, 'account.html', values)
 def render(self, t, values):
@@ -27,6 +36,7 @@ def render(self, t, values):
     except: values['referer'] = "/"
     if users.is_current_user_admin():
         values['admin'] = True
+    values['tagline'] = random.choice(taglines)
     templatefile = '_templates/' + t
     path = os.path.join(os.path.dirname(os.path.dirname(__file__)), templatefile)
     self.response.out.write(template.render(path, values))
@@ -102,6 +112,7 @@ class JsonUpdateSection(webapp2.RequestHandler):
             record.sectionsdeleted += 1
         else:
             section.content = newcontent
+            section.title = newcontent.split("\n")[0][:60]
             section.put()
             response = 1
             record.sectionedits += 1

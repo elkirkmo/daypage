@@ -12,12 +12,12 @@
 
   <body>
     <div class="row">
-      <div class="twelve columns">
-	<img src="" style="float: right;"/>
+      <div class="nine columns">
 	<h1>Daypage</h1>
-	
-	<h2> <span style="color: #F22E2E">Under Development</span></h2>
-
+	{% if tagline %}<span>{{ tagline }}</span>{% endif %}
+      </div>
+      <div class="three columns">
+	<h4><span style="color: #F22E2E">Under Development</span></h4>
 	{% if user %}
 	<p>Hi {{ user.nickname }}. <a href="{{ logout }}">Sign Out</a></p>
 	{% if admin %}
