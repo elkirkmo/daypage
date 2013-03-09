@@ -17,7 +17,7 @@ min-height: 100px;
 }
 
 #newdaypagesection:focus, .daypagesection:focus {
-background: #d3deff;
+background: #e3eeff;
 }
 
 #newdaypagesection {
@@ -42,7 +42,7 @@ border: none;
 
 <div class="row">
   <div class="twelve columns">
-    <input type="text" placeholder="Search (forthcoming)" id="search"/>    
+    <input type="text" placeholder="Search (forthcoming)" id="search" tabindex="-1"/>    
   </div>
 </div>
 
@@ -99,7 +99,7 @@ $('#sectioncrib').on('blur', '#newdaypagesection', function(event) {
             $(event.target).attr("id", data.sectionid);
             $(event.target).attr("class", "daypagesection");
             $(event.target).attr("placeholder", "");
-            $(event.target).parent().append("<textarea id='newdaypagesection' rows=1 placeholder='Add something new to your day'></textarea>").fadeIn('250');
+            $(event.target).parent().append("<textarea id='newdaypagesection' rows=1 placeholder='Add something new to your day' spellcheck='false'></textarea>").fadeIn('250');
             autoSize();
          }
          }, 'json');
