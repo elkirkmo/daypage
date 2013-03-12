@@ -25,11 +25,11 @@ taglines = [
 #render(self, 'account.html', values)
 def render(self, t, values):
     if values["user"]:  # signed in already
-        values["logout"] = users.create_logout_url(self.request.uri)
+        values["logout"] = users.create_logout_url('/')
     else:     # let user choose authenticator
         values["logins"] = []
         for name, uri in providers.items():
-            url = users.create_login_url(federated_identity=uri)
+            url = users.create_login_url(dest_url='/home', federated_identity=uri)
             temp = {"name": name, "url": url }
             values["logins"].append(temp)
     try: values['referer'] = self.request.headers['Referer']
@@ -50,14 +50,20 @@ def renderjson(self, values):
 class MainHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
-        if user:
-            template = "home.html"
-        else:
-            template = "landing.html"
         values = {
             "user": user,
             }
-        render(self, template, values)
+        render(self, "landing.html", values)
+
+class HomePage(webapp2.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+        if not user:
+            return self.redirect("/")
+        values = {
+            "user": user,
+            }
+        render(self, "home.html", values)
 
 class AjaxLoadSections(webapp2.RequestHandler):
     '''datestring, mm/dd/yyyy'''

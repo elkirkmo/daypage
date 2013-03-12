@@ -6,6 +6,7 @@ app = webapp2.WSGIApplication([
         ('/jsonupdatesection', JsonUpdateSection),
         ('/jsongetsections', JsonGetSections),
         ('/ajaxloadsections', AjaxLoadSections),
+        ('/home', HomePage),
         ('/maintain', Maintain),
         ('/', MainHandler)
 ], debug=True)
