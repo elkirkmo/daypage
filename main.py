@@ -7,6 +7,8 @@ app = webapp2.WSGIApplication([
         ('/jsongetsections', JsonGetSections),
         ('/ajaxloadsections', AjaxLoadSections),
         ('/home', HomePage),
-        ('/maintain', Maintain),
+        ('/settings', SettingsPage),
+        ('/logincheck', LoginCheck),
+        ('/maintain', Maintain),      
         ('/', MainHandler)
 ], debug=True)

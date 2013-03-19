@@ -10,6 +10,12 @@ class Account(db.Model):
     notedays = db.StringListProperty()
     firstname = db.StringProperty()
     lastname = db.StringProperty()
+    email = db.StringProperty()
+    sectionscreated = db.IntegerProperty(default = 0)
+    sectionedits = db.IntegerProperty(default = 0)   
+    sectionsdeleted = db.IntegerProperty(default = 0) 
+    def fullname(self):
+        return self.firstname + " " + self.lastname
 
 class Section(db.Model):
     date_created = db.DateTimeProperty(auto_now_add = True)
@@ -18,12 +24,14 @@ class Section(db.Model):
     content = db.TextProperty()
     order = db.IntegerProperty()
     user = db.UserProperty()
+    account = db.ReferenceProperty(Account)
     title = db.StringProperty()
 
     def initialorder(self):
         self.order = Section.all().filter("date =", self.date).count() + 1
 
 class SiteRecord(db.Model):
-    sectionscreated = db.IntegerProperty()
-    sectionsdeleted = db.IntegerProperty()
-    sectionedits = db.IntegerProperty()
+    sectionscreated = db.IntegerProperty(default = 0)
+    sectionsdeleted = db.IntegerProperty(default = 0)
+    sectionedits = db.IntegerProperty(default = 0)
+    accounts = db.IntegerProperty(default = 0)

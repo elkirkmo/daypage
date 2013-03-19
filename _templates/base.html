@@ -22,8 +22,9 @@
 	<h4><span style="color: #F22E2E">Development</span></h4>
 
 	{% if user %}
-	<p><a href="/home">{{ user.nickname }}</a>
-	<br><a href="{{ logout }}" tabindex="-1">Sign Out</a></p>
+	<p><a href="/home">{% if account %}{{ account.fullname }}{% else %}{{ user.nickname }}{% endif %}</a>
+	  <br><a href="/settings">Settings</a>
+	  <br><a href="{{ logout }}" tabindex="-1">Sign Out</a></p>
 	{% if admin %}
 	{% endif %}
 
