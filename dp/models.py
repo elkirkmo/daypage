@@ -33,6 +33,7 @@ class Section(db.Model):
     user = db.UserProperty()
     account = db.ReferenceProperty(Account)
     title = db.StringProperty()
+    length = db.IntegerProperty()
 
     def initialorder(self):
         try: self.order = self.account.section_set.filter("date =", self.date).count() + 1

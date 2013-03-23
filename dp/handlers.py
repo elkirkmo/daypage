@@ -166,6 +166,7 @@ class JsonNewSection(webapp2.RequestHandler):
             content = self.request.get("content"),
             user = user,
             account = account,
+            length = len(self.request.get("content")),
             )
         section.initialorder()
         section.put()
@@ -198,6 +199,7 @@ class JsonUpdateSection(webapp2.RequestHandler):
             section.content = newcontent
             section.title = newcontent.split("\n")[0][:60]
             section.account = account
+            section.length = len(newcontent)
             section.put()
             response = 1
             record.sectionedits += 1
@@ -231,4 +233,8 @@ class Maintain(webapp2.RequestHandler):
     def get(self):
         if not users.is_current_user_admin():
             return self.response.out.write("Sorry, not admin")
+        sections = Section.all().run()
+        for i in sections:
+            i.length = len(i.content)
+            i.put()
         self.response.out.write("Complete")
