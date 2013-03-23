@@ -84,6 +84,15 @@ class LoginCheck(webapp2.RequestHandler):
             else:
                 record.accounts = 1
                 record.put()
+            #check if there was data for user, add to account:
+            sections = Section.all().filter("user =", user).run()
+            if sections:
+                for section in sections:
+                    #add to account, increase account.sectionscreated
+                    section.account = account
+                    section.put()
+                    account.sectionscreated += 1
+                account.put()
         self.redirect("/home")
 
 class HomePage(webapp2.RequestHandler):
