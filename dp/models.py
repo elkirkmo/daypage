@@ -21,6 +21,8 @@ class Account(db.Model):
             return self.firstname + " " + self.lastname
         else:
             return None
+    def totalsections(self):
+        return self.sectionscreated - self.sectionsdeleted
 
 class Section(db.Model):
     date_created = db.DateTimeProperty(auto_now_add = True)
