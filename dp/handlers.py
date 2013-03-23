@@ -6,8 +6,8 @@ from google.appengine.ext import db
 
 providers = {
     'Google'   : 'https://www.google.com/accounts/o8/id',
-    'Yahoo'    : 'yahoo.com',
     'MyOpenID' : 'myopenid.com'
+    #    'Yahoo'    : 'yahoo.com',
     # add more here
 }
 taglines = [

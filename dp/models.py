@@ -33,7 +33,8 @@ class Section(db.Model):
     title = db.StringProperty()
 
     def initialorder(self):
-        self.order = self.account.section_set.filter("date =", self.date).count() + 1
+        try: self.order = self.account.section_set.filter("date =", self.date).count() + 1
+        except: self.order = 1
 
 class SiteRecord(db.Model):
     sectionscreated = db.IntegerProperty(default = 0)
