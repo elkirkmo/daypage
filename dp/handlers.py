@@ -66,7 +66,15 @@ class LoginCheck(webapp2.RequestHandler):
         if not account:
             account = Account(
                 user = user,                
-                email = user
+                userid = user.user_id(),
+                federatedidentity = user.federated_identity(),
+                provider = user.federated_provider(),
+                email = "",
+                firstname = "",
+                lastname = "",
+                sectionscreated = 0,
+                sectionedits = 0,
+                sectionsdeleted = 0,
                 )
             account.put()
             record = SiteRecord.all().get()
@@ -124,7 +132,7 @@ class AjaxLoadSections(webapp2.RequestHandler):
         account = Account.all().filter("user =", user).get()
         month, day, year = self.request.get("datestring").split("/")
         thisday = datetime.date(int(year), int(month), int(day))
-        sections = Section.all().filter("date =", thisday).filter("user =", user).order("order").run()
+        sections = Section.all().filter("date =", thisday).filter("user =", user).run()
         values = {
             "response": 1,
             "sections": sections,
@@ -140,7 +148,7 @@ class JsonNewSection(webapp2.RequestHandler):
         account = Account.all().filter("user =", user).get()
         content = self.request.get("content")
         if content == "":
-            return renderjson(self, {"response": 2})
+            return renderjson(self, {"response": 0})
         year = int(self.request.get("year"))
         month = int(self.request.get("month"))
         day = int(self.request.get("day"))
@@ -160,8 +168,7 @@ class JsonNewSection(webapp2.RequestHandler):
         values = {
             "response": 1,
             "sectionid": section.key().id(),
-            "user": user,
-            "account": account,
+            "accountid": account.key().id(),
             }
         renderjson(self, values)
 
@@ -178,7 +185,6 @@ class JsonUpdateSection(webapp2.RequestHandler):
             response = 0
             record.sectionsdeleted += 1
             account.sectionsdeleted += 1
-            account.put()
         else:                     #new stuff, save the change
             section.content = newcontent
             section.title = newcontent.split("\n")[0][:60]
@@ -187,12 +193,11 @@ class JsonUpdateSection(webapp2.RequestHandler):
             response = 1
             record.sectionedits += 1
             account.sectionedits += 1
-            account.put()
+        account.put()
         record.put()
         values = {
             "response": response,
-            "user": user,
-            "account": account,
+            "accountid": account.key().id(),
             }
         renderjson(self, values)
 
@@ -209,8 +214,7 @@ class JsonGetSections(webapp2.RequestHandler):
         values = {
             "response": 1,
             "sections": sections,
-            "user": user,
-            "account": account,
+            "accountid": account.key().id(),
             }
         renderjson(self, values)
 

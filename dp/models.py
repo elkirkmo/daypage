@@ -7,6 +7,8 @@ class Account(db.Model):
     date_edited = db.DateTimeProperty(auto_now = True)
     user = db.UserProperty()
     userid = db.StringProperty()
+    federatedidentity = db.StringProperty()
+    federatedprovider = db.StringProperty()
     notedays = db.StringListProperty()
     firstname = db.StringProperty()
     lastname = db.StringProperty()
@@ -15,7 +17,10 @@ class Account(db.Model):
     sectionedits = db.IntegerProperty(default = 0)   
     sectionsdeleted = db.IntegerProperty(default = 0) 
     def fullname(self):
-        return self.firstname + " " + self.lastname
+        if self.firstname != "":
+            return self.firstname + " " + self.lastname
+        else:
+            return None
 
 class Section(db.Model):
     date_created = db.DateTimeProperty(auto_now_add = True)
@@ -28,7 +33,7 @@ class Section(db.Model):
     title = db.StringProperty()
 
     def initialorder(self):
-        self.order = Section.all().filter("date =", self.date).count() + 1
+        self.order = self.account.section_set.filter("date =", self.date).count() + 1
 
 class SiteRecord(db.Model):
     sectionscreated = db.IntegerProperty(default = 0)
