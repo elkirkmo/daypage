@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Daypage - A Fast-paced, Real Time, 3D, AJAX-Packing Day Ledger.</title>
+    <title>{% block title %}Daypage{% endblock title %}</title>
     <link rel="stylesheet" type="text/css" href="/_static/stylesheets/foundation.min.css" />
     <style>
       html { background: #292929;   overflow-y: scroll; }
@@ -12,33 +12,44 @@
   </head>
 
   <body>
-    <div class="row">
-      <div class="nine columns">
-	<a href="/"><h1>Daypage</h1></a>
-	{% if tagline %}<span>{{ tagline }}</span>{% endif %}
-      </div>
-      <div class="three columns">
-	<br>
-	<h4><span style="color: #F22E2E">Development</span></h4>
 
+    <div class="contain-to-grid">
+      <nav class="top-bar">
+	<ul class="title-area">
+	  <li class="name"><a href="/">Daypage</a></li>
+	</ul>
 	{% if user %}
-	<p><a href="/home">{% if account.fullname %}{{ account.fullname }}{% else %}{{ user.nickname }}{% endif %}</a>
-	  <br><a href="/settings">Settings</a>
-	  <br><a href="{{ logout }}" tabindex="-1">Sign Out</a></p>
-	{% if admin %}
-	{% endif %}
-
+	<ul class="right">
+	  <li><a href="{{ logout }}">Sign Out</a><li>	 
+	</ul>
+	<ul class="right">
+	  <li><a href="/settings">Settings</a><li>	 
+	</ul>
+	<ul class="right">
+	  <li><a href="/home">{% if account.fullname %}{{ account.fullname }}{% else %}{{ user.nickname }}{% endif %}</a><li>	 
+	</ul>
 	{% else %}
-	<p>Please sign in: <br>| 
+	<ul class="right">
 	  {% for signin in logins %}
-	  <a href="{{ signin.url }}">{{ signin.name }}</a> | 
+	  <li>
+	    <a href="{{ signin.url }}">Sign in with {{ signin.name }}</a>
+	  </li>
 	  {% endfor %}
-
+	</ul>
 	{% endif %}
-      </div>
+      </nav>
     </div>
+
+    <br>
     {% block body %}{% endblock body %}
 
+
+    <div class="row" id="footer">
+      <div class="twelve columns">
+	&copy2013 Daypage | 
+	{% if tagline %}{{ tagline }}{% endif %}	
+      </div>
+    </div>
 
     {% block endbody %}{% endblock endbody %}
     <script type="text/javascript">
