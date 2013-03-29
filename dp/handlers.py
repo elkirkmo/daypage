@@ -167,6 +167,7 @@ class JsonNewSection(webapp2.RequestHandler):
             user = user,
             account = account,
             length = len(self.request.get("content")),
+            title = newcontent.split("\n")[0][:60],
             )
         section.initialorder()
         section.put()
