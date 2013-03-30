@@ -142,6 +142,9 @@ class SettingsPage(webapp2.RequestHandler):
                         return self.redirect("/settings?alertmessage=Username " + username + " is already in use.")
                     else:
                         account.username = username
+            else:
+                if account.username != "":
+                    return self.redirect("/settings?alertmessage=You shall not remove your username.")
             account.put()
         self.redirect("/settings")
 
