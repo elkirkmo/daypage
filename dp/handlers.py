@@ -1,4 +1,4 @@
-import os, webapp2, json, datetime, random
+import os, webapp2, json, datetime, random, urllib, hashlib
 from models import *
 from google.appengine.api import users
 from google.appengine.ext.webapp import template
@@ -26,6 +26,7 @@ taglines = [
 def render(self, t, values):
     if values["user"]:  # signed in already
         values["logout"] = users.create_logout_url('/')
+        values["avatarhash"] = hashlib.md5(values["account"].email.lower()).hexdigest()
     else:     # let user choose authenticator
         values["logins"] = []
         for name, uri in providers.items():
