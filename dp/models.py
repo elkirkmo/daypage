@@ -10,6 +10,7 @@ class Account(db.Model):
     federatedidentity = db.StringProperty()
     federatedprovider = db.StringProperty()
     notedays = db.StringListProperty()
+    username = db.StringProperty()
     firstname = db.StringProperty()
     lastname = db.StringProperty()
     email = db.StringProperty()

@@ -3,8 +3,14 @@
 {% block body %}
 <div class="row">
   <div class="nine columns">
+    {% if alertmessage %}
+    <div class="alert-box alert round">
+      {{ alertmessage }}
+    </div>
+    {% endif %}
     <h3>Settings</h3>
     <form action="/settings" method="post">
+      <input class="" type="text" name="username" placeholder="Username" {% if account.username %}value="{{ account.username }}"{% endif %}/>
       <input class="" type="text" name="firstname" placeholder="First Name" {% if account.firstname %}value="{{ account.firstname }}"{% endif %}/>
       <input class="" type="text" name="lastname" placeholder="Last Name" {% if account.lastname %}value="{{ account.lastname }}"{% endif %}/>
       <input class="" type="text" name="email" placeholder="Email" {% if account.email %}value="{{ account.email }}"{% endif %}/>

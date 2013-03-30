@@ -116,11 +116,13 @@ class SettingsPage(webapp2.RequestHandler):
         values = {
             "user": user,
             "account": account,
+            "alertmessage": self.request.get("alertmessage"),
             }
         render(self, "settings.html", values)
     def post(self):
         user = users.get_current_user()
         account = Account.all().filter("user =", user).get()
+        username = self.request.get("username")
         firstname = self.request.get("firstname")
         lastname = self.request.get("lastname")
         email = self.request.get("email")
@@ -131,6 +133,15 @@ class SettingsPage(webapp2.RequestHandler):
                 account.lastname = lastname
             if email != "":
                 account.email = email
+            if username != "":
+                if username != account.username:
+                    #check for duplicate
+                    checkusername = Account.all().filter("username =", username).get()
+                    if checkusername:
+                        #redirect with an alertmessage
+                        return self.redirect("/settings?alertmessage=Username " + username + " is already in use.")
+                    else:
+                        account.username = username
             account.put()
         self.redirect("/settings")
 
