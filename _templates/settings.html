@@ -14,6 +14,7 @@
       <input class="" type="text" name="firstname" placeholder="First Name" {% if account.firstname %}value="{{ account.firstname }}"{% endif %}/>
       <input class="" type="text" name="lastname" placeholder="Last Name" {% if account.lastname %}value="{{ account.lastname }}"{% endif %}/>
       <input class="" type="text" name="email" placeholder="Email" {% if account.email %}value="{{ account.email }}"{% endif %}/>
+      <p>Your email address controls your avatar through <a href="http://gravatar.com/" target="_blank" >Gravatar</a></p>
       <input type="submit" name="submit" value="Save" />
     </form>
   </div>
