@@ -9,6 +9,10 @@ app = webapp2.WSGIApplication([
         ('/home', HomePage),
         ('/settings', SettingsPage),
         ('/logincheck', LoginCheck),
-        ('/maintain', Maintain),      
-        ('/', MainHandler)
+        ('/maintain', Maintain),
+        ('/d/(.*)/(.*)', UserPage),
+        ('/d/(.*)', UserPage), 
+        ('/d', UserPage),
+        ('/', MainHandler),
+        ('.*', MainHandler),
 ], debug=True)

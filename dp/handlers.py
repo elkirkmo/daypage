@@ -108,6 +108,35 @@ class HomePage(webapp2.RequestHandler):
             }
         render(self, "home.html", values)
 
+class UserPage(webapp2.RequestHandler):
+    '''useridentifier is either userid or username'''
+    '''datestring, yyyymmdd'''
+    def get(self, useridentifier = None, datestring = None):
+        user = users.get_current_user()
+        account = Account.all().filter("user =", user).get()        
+        onaccount = None
+        if not useridentifier and not datestring:
+            template = "nouser.html"
+        if useridentifier != None:
+            template = "userhome.html"
+            try:
+                int(useridentifier)
+                accountid = True
+            except:
+                accountid = False
+            if accountid:
+                onaccount = Account.get_by_id(int(useridentifier))
+            else:
+                onaccount = Account.all().filter("username =", useridentifier).get()
+            if datestring:
+                template = "userday.html"
+        values = {
+            "user": user,
+            "account": account,
+            "onaccount": onaccount,
+            }
+        render(self, template, values)
+
 class SettingsPage(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
@@ -135,6 +164,8 @@ class SettingsPage(webapp2.RequestHandler):
             if email != "":
                 account.email = email
             if username != "":
+                if not username.replace(".", "").isalpha() or " " in username:
+                    return self.redirect("/settings?alertmessage=Sorry only letters and periods are allow in usernames")
                 if username != account.username:
                     #check for duplicate
                     checkusername = Account.all().filter("username =", username).get()
