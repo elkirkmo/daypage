@@ -29,9 +29,9 @@
   showOtherMonths: true,
   selectOtherMonths: true,
   onSelect: function(selectedDate){
-  thisday = new Date(selectedDate);
-  var datestring =  thisday.toISOString().replace('-', '').replace('-', '').substring(0,8);
-  window.location.href = '/d/{{ account.username }}/' + datestring;
+    thisday = new Date(selectedDate);
+    var datestring =  thisday.toISOString().replace('-', '').replace('-', '').substring(0,8);
+    window.location.href = '/d/{{ account.username }}/' + datestring;
   }
   });  
 

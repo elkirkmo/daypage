@@ -25,14 +25,25 @@
 {% block body %}
 <div class="row">
   <div class="nine columns">
+    <img id="navgravatar" src="http://www.gravatar.com/avatar/{{ avatarhash }}?s=65&d=mm" /> 
     <h1>{{ onaccount.fullname }}</h1>
-    
+
+    <div id="sectioncrib">
+    </div>
+
+    {% if sections|length == 0 %}
+    <h4>No sections on this day</h4>
+
+    {% else %}
     {% for s in sections %}
     <p class="daypagesection">{{ s.content|linebreaksbr }}</p>
     {% endfor %}
 
+    {% endif %}
+
   </div>
   <div class="three columns">
+    <h4 id="selecteddate">{{ selecteddate }}</h4>
     <input type="text" id="datepickeroutput" />
     <div id="datepicker" ></div>
   </div>
@@ -46,10 +57,11 @@
   $( "#datepicker" ).datepicker({
   showOtherMonths: true,
   selectOtherMonths: true,
+  defaultDate: "{{ selecteddate }}",
   onSelect: function(selectedDate){
-  thisday = new Date(selectedDate);
-  var datestring =  thisday.toISOString().replace('-', '').replace('-', '').substring(0,8);
-  window.location.href = '/d/{{ account.username }}/' + datestring;
+    thisday = new Date(selectedDate);
+    var datestring =  thisday.toISOString().replace('-', '').replace('-', '').substring(0,8);
+    window.location.href = '/d/{{ account.username }}/' + datestring;
   }
   });  
 

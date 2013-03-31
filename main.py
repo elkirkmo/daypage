@@ -6,6 +6,7 @@ app = webapp2.WSGIApplication([
         ('/jsonupdatesection', JsonUpdateSection),
         ('/jsongetsections', JsonGetSections),
         ('/ajaxloadsections', AjaxLoadSections),
+        ('/ajaxloadpublicsections', AjaxLoadPublicSections),        
         ('/home', HomePage),
         ('/settings', SettingsPage),
         ('/logincheck', LoginCheck),

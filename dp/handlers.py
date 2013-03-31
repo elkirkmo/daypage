@@ -116,6 +116,7 @@ class UserPage(webapp2.RequestHandler):
         account = Account.all().filter("user =", user).get()        
         onaccount = None
         sections = None
+        selecteddate = None
         if not useridentifier and not datestring:
             template = "nouser.html"
         if useridentifier != None:
@@ -131,13 +132,18 @@ class UserPage(webapp2.RequestHandler):
                 onaccount = Account.all().filter("username =", useridentifier).get()
             if datestring:
                 template = "userday.html"
-                thisday = datetime.date(int(datestring[0:4]), int(datestring[4:6]), int(datestring[6:8]))                
+                year = datestring[0:4]
+                month = datestring[4:6]
+                day = datestring[6:8]
+                thisday = datetime.date(int(year), int(month), int(day))                
                 sections = Section.all().filter("date =", thisday).filter("account =", account).run()
+                selecteddate = month + "/" + day + "/" + year
         values = {
             "user": user,
             "account": account,
             "onaccount": onaccount,
             "sections": sections,
+            "selecteddate": selecteddate,
             }
         render(self, template, values)
 
@@ -199,6 +205,33 @@ class AjaxLoadSections(webapp2.RequestHandler):
             "account": account,
             }
         render(self, "_loadsections.html", values)
+
+class AjaxLoadPublicSections(webapp2.RequestHandler):
+    '''datestring, mm/dd/yyyy'''
+    def post(self):
+        user = users.get_current_user()
+        account = Account.all().filter("user =", user).get()
+        useridentifier = self.request.get("useridentifier")
+        datestring = self.request.get("datestring")
+        try:
+            int(useridentifier)
+            accountid = True
+        except:
+            accountid = False
+        if accountid:
+            onaccount = Account.get_by_id(int(useridentifier))
+        else:
+            onaccount = Account.all().filter("username =", useridentifier).get()
+        month, day, year = self.request.get("datestring").split("/")
+        thisday = datetime.date(int(year), int(month), int(day))
+        sections = Section.all().filter("date =", thisday).filter("account =", onaccount).run()
+        values = {
+            "response": 1,
+            "sections": sections,
+            "user": user,
+            "account": account,
+            }
+        render(self, "_loadpublicsections.html", values)
 
 class JsonNewSection(webapp2.RequestHandler):
     ''' content, year, month, day '''
