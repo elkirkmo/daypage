@@ -10,6 +10,7 @@
       .ui-state-highlight, .ui-widget-content .ui-state-highlight, .ui-widget-header .ui-state-highlight {color: white !important; }
       .ui-widget-header { color: white !important; }
       .ui-datepicker .ui-datepicker-prev span, .ui-datepicker .ui-datepicker-next span {color: white !important; }
+      #navlogo { float: left; padding: 7px 5px 0px 0px; }
       #navgravatar { float: left; padding: 5px 11px 0px 0px; }
       
     </style>
@@ -23,7 +24,11 @@
     <div class="contain-to-grid">
       <nav class="top-bar">
 	<ul class="title-area">
-	  <li class="name"><a href="/">Daypage</a></li>
+	  <li class="name">
+	    <a href="/">
+	      <img id="navlogo" src="_static/images/logo.png" />
+	      Daypage</a>
+	  </li>
 	</ul>
 	{% if user %}
 	<ul class="right">
