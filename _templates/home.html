@@ -57,6 +57,10 @@ border: none;
   <div class="three columns">
     <input type="text" id="datepickeroutput" />
     <div id="datepicker" ></div>
+    <h4>Instructions</h4>
+    <p>Pick a day</p>
+    <p>Type your notes in a section</p>
+    <p>Click away to save</p>
   </div>
 
 </div>
@@ -105,11 +109,15 @@ $('#sectioncrib').on('blur', '#newdaypagesection', function(event) {
 
 /* UPDATE SECTION */
 $('#sectioncrib').on('blur', '.daypagesection', function(event) {
+  $(event.target).css("background", "#FDCB8F").animate();
   var sectionid = $(event.target).attr("id");
   var content = $(event.target).val();
   var datatosend = {sectionid: sectionid, content: content};
   $.post("/jsonupdatesection", datatosend, 
       function(data){
+         if (data.response == "1"){
+           $(event.target).css("background", "white");
+         }
          if (data.response == "0"){
              $(event.target).fadeOut('250', function(){ $(event.target).remove()});
          }

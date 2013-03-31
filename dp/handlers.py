@@ -117,6 +117,7 @@ class UserPage(webapp2.RequestHandler):
         onaccount = None
         sections = None
         selecteddate = None
+        onavatarhash = None
         if not useridentifier and not datestring:
             template = "nouser.html"
         if useridentifier != None:
@@ -130,13 +131,14 @@ class UserPage(webapp2.RequestHandler):
                 onaccount = Account.get_by_id(int(useridentifier))
             else:
                 onaccount = Account.all().filter("username =", useridentifier).get()
+            onavatarhash = hashlib.md5(onaccount.email.lower()).hexdigest()
             if datestring:
                 template = "userday.html"
                 year = datestring[0:4]
                 month = datestring[4:6]
                 day = datestring[6:8]
                 thisday = datetime.date(int(year), int(month), int(day))                
-                sections = Section.all().filter("date =", thisday).filter("account =", account).run()
+                sections = Section.all().filter("date =", thisday).filter("account =", onaccount).run()
                 selecteddate = month + "/" + day + "/" + year
         values = {
             "user": user,
@@ -144,6 +146,7 @@ class UserPage(webapp2.RequestHandler):
             "onaccount": onaccount,
             "sections": sections,
             "selecteddate": selecteddate,
+            "onavatarhash": onavatarhash,
             }
         render(self, template, values)
 
