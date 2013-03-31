@@ -115,6 +115,7 @@ class UserPage(webapp2.RequestHandler):
         user = users.get_current_user()
         account = Account.all().filter("user =", user).get()        
         onaccount = None
+        sections = None
         if not useridentifier and not datestring:
             template = "nouser.html"
         if useridentifier != None:
@@ -130,10 +131,13 @@ class UserPage(webapp2.RequestHandler):
                 onaccount = Account.all().filter("username =", useridentifier).get()
             if datestring:
                 template = "userday.html"
+                thisday = datetime.date(int(datestring[0:4]), int(datestring[4:6]), int(datestring[6:8]))                
+                sections = Section.all().filter("date =", thisday).filter("account =", account).run()
         values = {
             "user": user,
             "account": account,
             "onaccount": onaccount,
+            "sections": sections,
             }
         render(self, template, values)
 
@@ -187,7 +191,7 @@ class AjaxLoadSections(webapp2.RequestHandler):
         account = Account.all().filter("user =", user).get()
         month, day, year = self.request.get("datestring").split("/")
         thisday = datetime.date(int(year), int(month), int(day))
-        sections = Section.all().filter("date =", thisday).filter("user =", user).run()
+        sections = Section.all().filter("date =", thisday).filter("account =", account).run()
         values = {
             "response": 1,
             "sections": sections,

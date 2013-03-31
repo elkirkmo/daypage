@@ -2,9 +2,22 @@
 
 {% block head %}
 <style>
-  #datepickeroutput {
-  display: none;
-  }  
+  #datepickeroutput { display: none; }  
+
+  .daypagesection {
+  padding: 6px;
+  border-radius: 2px;
+  border: 1px #2BBFBD solid;
+  outline: none;
+  resize: none;
+  vertical-align: top;
+  -webkit-transition: height 0.2s;
+  -moz-transition: height 0.2s;
+  transition: height 0.2s;
+  font-size: 20px;
+  background: none;
+  min-height: 100px;
+  }
 </style>
 <link rel="stylesheet" href="/_static/stylesheets/daypage-theme/jquery-ui-1.10.1.custom.css" />
 {% endblock head %}
@@ -13,6 +26,11 @@
 <div class="row">
   <div class="nine columns">
     <h1>{{ onaccount.fullname }}</h1>
+    
+    {% for s in sections %}
+    <p class="daypagesection">{{ s.content|linebreaksbr }}</p>
+    {% endfor %}
+
   </div>
   <div class="three columns">
     <input type="text" id="datepickeroutput" />
