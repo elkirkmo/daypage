@@ -20,6 +20,7 @@ background-repeat: no-repeat;
 
 #newdaypagesection:focus, .daypagesection:focus {
 background: #EDFFFD; /*e3eeff*/
+background-color: #EDFFFD; /*e3eeff*/
 }
 
 #newdaypagesection {
@@ -97,6 +98,7 @@ $('#sectioncrib').on('blur', '#newdaypagesection', function(event) {
   var day = thisday.getDate();
   var content = $(event.target).val();
   var datatosend = {year: year, month: month, day: day, content: content };
+  $(event.target).css("background-color", "white");
   $.post("/jsonnewsection", datatosend, 
       function(data){
          if (data.response == "1"){
@@ -107,6 +109,10 @@ $('#sectioncrib').on('blur', '#newdaypagesection', function(event) {
             autoSize();
          }
          }, 'json');
+});
+
+$('#sectioncrib').on('focus', '.daypagesection, #newdaypagesection', function(event) {
+  $(event.target).css("background-color", "#EDFFFD");
 });
 
 /* UPDATE SECTION */
