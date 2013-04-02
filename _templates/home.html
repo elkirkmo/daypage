@@ -14,6 +14,8 @@ transition: height 0.2s;
 font-size: 20px;
 background: none;
 min-height: 100px;
+background-position: bottom right;
+background-repeat: no-repeat;
 }
 
 #newdaypagesection:focus, .daypagesection:focus {
@@ -109,7 +111,10 @@ $('#sectioncrib').on('blur', '#newdaypagesection', function(event) {
 
 /* UPDATE SECTION */
 $('#sectioncrib').on('blur', '.daypagesection', function(event) {
-  $(event.target).css("background", "#e6e6e6").animate();
+/*  $(event.target).css("background", "#e6e6e6").animate(); */
+  $(event.target).css("background-image", "url('_static/images/saving.png')");
+  $(event.target).css("background-repeat", "no-repeat");
+  $(event.target).css("background-position", "bottom right");  
   var sectionid = $(event.target).attr("id");
   var content = $(event.target).val();
   var datatosend = {sectionid: sectionid, content: content};
@@ -117,6 +122,7 @@ $('#sectioncrib').on('blur', '.daypagesection', function(event) {
       function(data){
          if (data.response == "1"){
            $(event.target).css("background", "white");
+           $(event.target).css("background-image", "");
          }
          if (data.response == "0"){
              $(event.target).fadeOut('250', function(){ $(event.target).remove()});
