@@ -18,6 +18,8 @@
   background: none;
   min-height: 100px;
   }
+  #sectioncrib {min-height: 600px; margin: 30px 0px 0px 0px;}
+
 </style>
 <link rel="stylesheet" href="/_static/stylesheets/daypage-theme/jquery-ui-1.10.1.custom.css" />
 {% endblock head %}
@@ -29,17 +31,15 @@
     <h1>{{ onaccount.fullname }}</h1>
 
     <div id="sectioncrib">
-    </div>
 
-    {% if sections|length == 0 %}
-    <h4>No sections on this day</h4>
-
-    {% else %}
+    {% if sections %}
     {% for s in sections %}
     <p class="daypagesection">{{ s.content|linebreaksbr }}</p>
     {% endfor %}
 
     {% endif %}
+
+    </div>
 
   </div>
   <div class="three columns">

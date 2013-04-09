@@ -5,6 +5,7 @@
   #datepickeroutput {
   display: none;
   }  
+  #sectioncrib {min-height: 600px; margin: 30px 0px 0px 0px;}
 </style>
 <link rel="stylesheet" href="/_static/stylesheets/daypage-theme/jquery-ui-1.10.1.custom.css" />
 {% endblock head %}
@@ -14,6 +15,10 @@
   <div class="nine columns">
     <img id="navgravatar" src="http://www.gravatar.com/avatar/{{ onavatarhash }}?s=65&d=mm" /> 
     <h1>{{ onaccount.fullname }}</h1>
+
+    <div id="sectioncrib">
+      Nothing here! Try clicking some days.
+    </div>
   </div>
   <div class="three columns">
     <input type="text" id="datepickeroutput" />
