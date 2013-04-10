@@ -24,6 +24,8 @@ background-color: #EDFFFD; /*e3eeff*/
 }
 
 #newdaypagesection {
+background-position: bottom right;
+background-repeat: no-repeat;
 }
 
 #sectioncrib {
@@ -95,25 +97,49 @@ border: none;
        autoSize();
      });
 
-/* CREATE NEW SECTION */
-$('#sectioncrib').on('blur', '#newdaypagesection', function(event) {
+function saveNewSection(event){
+  $(event.target).css("background-image", "url('_static/images/saving.png')");
+  $(event.target).css("background-repeat", "no-repeat");
+  $(event.target).css("background-position", "bottom right");  
   var year = thisday.getFullYear();
   var month = thisday.getMonth() + 1;
   var day = thisday.getDate();
   var content = $(event.target).val();
   var datatosend = {year: year, month: month, day: day, content: content };
-  $(event.target).css("background-color", "white");
   $.post("/jsonnewsection", datatosend, 
       function(data){
          if (data.response == "1"){
+            $(event.target).css("background", "white");
+            $(event.target).css("background-image", "");
             $(event.target).attr("id", data.sectionid);
             $(event.target).attr("class", "daypagesection");
             $(event.target).attr("placeholder", "");
             $(event.target).parent().append("<textarea id='newdaypagesection' rows=1 placeholder='Add something new to your day' spellcheck='false'></textarea>").fadeIn('250');
             autoSize();
+  
+            $('#sectioncrib').on('keyup', '#newdaypagesection', function(event) {
+            if ($(event.target).val() != ""){
+              saveNewSection(event);
+              $(this).off( event );
+            }
+            });
+
          }
          }, 'json');
+
+}
+
+$('#sectioncrib').on('keyup', '#newdaypagesection', function(event) {
+  if ($(event.target).val() != ""){
+  saveNewSection(event);
+  $(this).off( event ); 
+  }
 });
+
+/* CREATE NEW SECTION */
+/*$('#sectioncrib').on('blur', '#newdaypagesection', function(event) {
+ saveNewSection(event);
+}); */
 
 $('#sectioncrib').on('focus', '.daypagesection, #newdaypagesection', function(event) {
   $(event.target).css("background-color", "#EDFFFD");
