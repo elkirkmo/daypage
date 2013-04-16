@@ -97,6 +97,8 @@ border: none;
        autoSize();
      });
 
+
+/* CREATE NEW SECTION */
 function saveNewSection(event){
   $(event.target).css("background-image", "url('_static/images/saving.png')");
   $(event.target).css("background-repeat", "no-repeat");
@@ -109,7 +111,6 @@ function saveNewSection(event){
   $.post("/jsonnewsection", datatosend, 
       function(data){
          if (data.response == "1"){
-            $(event.target).css("background", "white");
             $(event.target).css("background-image", "");
             $(event.target).attr("id", data.sectionid);
             $(event.target).attr("class", "daypagesection");
@@ -136,10 +137,10 @@ $('#sectioncrib').on('keyup', '#newdaypagesection', function(event) {
   }
 });
 
-/* CREATE NEW SECTION */
-/*$('#sectioncrib').on('blur', '#newdaypagesection', function(event) {
- saveNewSection(event);
-}); */
+$('#sectioncrib').on('blur', '#newdaypagesection', function(event) {
+  $(event.target).css("background", "white");
+  $(event.target).css("background-image", "");
+});
 
 $('#sectioncrib').on('focus', '.daypagesection, #newdaypagesection', function(event) {
   $(event.target).css("background-color", "#EDFFFD");
