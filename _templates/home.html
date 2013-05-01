@@ -61,8 +61,6 @@ border: none;
 <div class="row">
 
   <div class="nine columns" id="sectioncrib">
-    <p>Your Home page.</p>
-    <p>Select a date from the calendar to start editing.</p>
   </div>
 
   <div class="three columns">
@@ -95,10 +93,11 @@ border: none;
   var datestring =  thisday.getMonth()+1 + "/" + thisday.getDate() + "/" + thisday.getFullYear();
   $('#thisday').html(datestring);
   $('#sectioncrib').empty();
-/*  $('#sectioncrib').load('/ajaxloadsections', {"datestring": datestring}, function(){ 
+  $('#sectioncrib').load('/ajaxloadsections', {"datestring": datestring}, function(){ 
        autoSize();
      });
-*/
+  $('#sectioncrib').empty();
+  $('#sectioncrib').html("<p>Select a day from the calendar</p>");  
 
 /* CREATE NEW SECTION */
 function saveNewSection(event){

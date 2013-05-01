@@ -79,11 +79,16 @@ class LoginCheck(webapp2.RequestHandler):
                 )
             account.put()
             record = SiteRecord.all().get()
-            if record.accounts:
+            if record:
                 record.accounts += 1
                 record.put()
             else:
-                record.accounts = 1
+                record = SiteRecord(
+                    accounts = 1,
+                    sectionscreated = 0,
+                    sectionedits = 0,
+                    sectionsdeleted = 0
+                    )
                 record.put()
             #check if there was data for user, add to account:
             sections = Section.all().filter("user =", user).run()
