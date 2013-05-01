@@ -178,7 +178,7 @@ class SettingsPage(webapp2.RequestHandler):
                 account.email = email
             if username != "":
                 if not username.replace(".", "").isalpha() or " " in username:
-                    return self.redirect("/settings?alertmessage=Sorry only letters and periods are allow in usernames")
+                    return self.redirect("/settings?alertmessage=Sorry only letters and periods are allowed in usernames")
                 if username != account.username:
                     #check for duplicate
                     checkusername = Account.all().filter("username =", username).get()
