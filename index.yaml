@@ -25,7 +25,7 @@ indexes:
   properties:
   - name: date=
   - name: user=
-  - name: order
+  - name: date_created
 
 - kind: Section
   properties:
