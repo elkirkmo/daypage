@@ -143,7 +143,7 @@ class UserPage(webapp2.RequestHandler):
                 month = datestring[4:6]
                 day = datestring[6:8]
                 thisday = datetime.date(int(year), int(month), int(day))                
-                sections = Section.all().filter("date =", thisday).filter("account =", onaccount).run()
+                sections = Section.all().filter("date =", thisday).filter("account =", onaccount).order('date_created').run()
                 selecteddate = month + "/" + day + "/" + year
         values = {
             "user": user,
@@ -205,7 +205,7 @@ class AjaxLoadSections(webapp2.RequestHandler):
         account = Account.all().filter("user =", user).get()
         month, day, year = self.request.get("datestring").split("/")
         thisday = datetime.date(int(year), int(month), int(day))
-        sections = Section.all().filter("date =", thisday).filter("account =", account).run()
+        sections = Section.all().filter("date =", thisday).filter("account =", account).order('date_created').run()
         values = {
             "response": 1,
             "sections": sections,
@@ -232,7 +232,7 @@ class AjaxLoadPublicSections(webapp2.RequestHandler):
             onaccount = Account.all().filter("username =", useridentifier).get()
         month, day, year = self.request.get("datestring").split("/")
         thisday = datetime.date(int(year), int(month), int(day))
-        sections = Section.all().filter("date =", thisday).filter("account =", onaccount).run()
+        sections = Section.all().filter("date =", thisday).filter("account =", onaccount).order('date_created').run()
         values = {
             "response": 1,
             "sections": sections,
@@ -313,7 +313,7 @@ class JsonGetSections(webapp2.RequestHandler):
         month = int(self.request.get("month"))
         day = int(self.request.get("day"))
         thisday = datetime.date(year, month, day),
-        sections = Section.all().filter("user =", user).filter("date =", thisday).run()
+        sections = Section.all().filter("account =", account).filter("date =", thisday).order('date_created').run()
         values = {
             "response": 1,
             "sections": sections,

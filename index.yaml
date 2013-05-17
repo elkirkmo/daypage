@@ -23,8 +23,8 @@ indexes:
 
 - kind: Section
   properties:
-  - name: date=
-  - name: user=
+  - name: account
+  - name: date
   - name: date_created
 
 - kind: Section
