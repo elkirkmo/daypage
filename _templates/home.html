@@ -110,20 +110,10 @@ border: none;
 <script type="text/javascript">
 
   function autoSize(){
-     $('.daypagesection, #newdaypagesection').autosize({append: "\n"});
+    $('.daypagesection, #newdaypagesection').autosize({append: "\n"});
+    $('.daypagesection, #newdaypagesection').trigger('autosize.resize');
+  /* autosize({append: "\n"}); */
   }
-
-  var thisday = new Date();
-
-  $(document).ready(function() {
-
-  var datestring =  thisday.getMonth()+1 + "/" + thisday.getDate() + "/" + thisday.getFullYear();
-  $('#thisday').val(datestring);
-  $('#sectioncrib').empty();
-  $('#sectioncrib').load('/ajaxloadsections', {"datestring": datestring}, function(){ 
-       autoSize();
-     });
-  $('#sectioncrib').empty();
 
 /* CREATE NEW SECTION */
 function saveNewSection(event){
@@ -155,6 +145,22 @@ function saveNewSection(event){
          }
          }, 'json');
 }
+
+function incrementDate(increment){
+  
+}
+
+  var thisday = new Date();
+
+  $(document).ready(function() {
+
+  var datestring =  thisday.getMonth()+1 + "/" + thisday.getDate() + "/" + thisday.getFullYear();
+  $('#thisday').val(datestring);
+  $('#sectioncrib').empty();
+  $('#sectioncrib').load('/ajaxloadsections', {"datestring": datestring}, function(){ 
+       autoSize();
+     });
+  $('#sectioncrib').empty();
 
 $('#sectioncrib').on('keyup', '#newdaypagesection', function(event) {
   if ($(event.target).val() != ""){
@@ -249,7 +255,9 @@ $('#search').blur(function() {
   }
   });
 
+  $("#sectionrow").click( function(){
 
+  });
 
   }); /* end document.ready */
 

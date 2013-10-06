@@ -5,6 +5,12 @@
 {% if not forloop.last %}<hr class="sectionhrule">{% endif %}
 {% endfor %}
 
+<script>
+$(document).ready( function(){
+   $(".daypagesection").last().focus();
+});
+</script>
+
 {% else %}
 
 <textarea id="newdaypagesection" rows="1" placeholder="Start today's page" spellcheck='false'></textarea>
