@@ -1,5 +1,11 @@
+<hr class="sectionhrule">
 {% for section in sections %}
 <textarea id="{{ section.key.id }}" class="daypagesection" rows="1" spellcheck='false'>{{ section.content }}</textarea>
+<hr class="sectionhrule">
 {% endfor %}
 
 <textarea id="newdaypagesection" rows="1" placeholder="Add something new to your day" spellcheck='false'></textarea>
+
+<script>
+  $('.daypagesection, #newdaypagesection').autosize({append: "\n"});
+</script>

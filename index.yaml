@@ -12,6 +12,12 @@ indexes:
 
 - kind: Section
   properties:
+  - name: account
+  - name: date
+  - name: date_created
+
+- kind: Section
+  properties:
   - name: date
   - name: order
 
@@ -20,12 +26,6 @@ indexes:
   - name: date
   - name: user
   - name: order
-
-- kind: Section
-  properties:
-  - name: account
-  - name: date
-  - name: date_created
 
 - kind: Section
   properties:

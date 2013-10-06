@@ -26,9 +26,11 @@ taglines = [
 def render(self, t, values):
     if values["user"]:  # signed in already
         values["logout"] = users.create_logout_url('/')
-        values["avatarhash"] = hashlib.md5(values["account"].email.lower()).hexdigest()
+        try: values["avatarhash"] = hashlib.md5(values["account"].email.lower()).hexdigest()
+        except: values["avatarhash"] = None
     else:     # let user choose authenticator
         values["logins"] = []
+        values["avatarhash"] = None
         for name, uri in providers.items():
             url = users.create_login_url(dest_url='/logincheck', federated_identity=uri)
             temp = {"name": name, "url": url }
@@ -282,6 +284,9 @@ class JsonUpdateSection(webapp2.RequestHandler):
         section = Section.get_by_id(int(self.request.get("sectionid")))
         newcontent = self.request.get("content")
         record = SiteRecord.all().get()
+        if not record:
+            record = SiteRecord()
+            record.put()
         if newcontent == "":      #everything is deleted!
             section.delete()
             response = 0
@@ -294,8 +299,8 @@ class JsonUpdateSection(webapp2.RequestHandler):
             section.length = len(newcontent)
             section.put()
             response = 1
-            record.sectionedits += 1
-            account.sectionedits += 1
+            try: account.sectionedits += 1
+            except: account.sectionedits = 1
         account.put()
         record.put()
         values = {

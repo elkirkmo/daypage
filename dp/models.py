@@ -15,7 +15,7 @@ class Account(db.Model):
     lastname = db.StringProperty()
     email = db.StringProperty()
     sectionscreated = db.IntegerProperty(default = 0)
-    sectionedits = db.IntegerProperty(default = 0)   
+    sectionedits = db.IntegerProperty(default = 0)
     sectionsdeleted = db.IntegerProperty(default = 0) 
     def fullname(self):
         if self.firstname != "":

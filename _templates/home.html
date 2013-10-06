@@ -4,14 +4,19 @@
 {% block head %}
 <style>
 #newdaypagesection, .daypagesection {
-border: 1px #2BBFBD solid;
+/*border: 1px #2BBFBD solid; */
+margin: 0;
+border: none;
 outline: none;
+box-shading: none;
+box-shadow: none;
 resize: none;
 vertical-align: top;
 -webkit-transition: height 0.2s;
 -moz-transition: height 0.2s;
 transition: height 0.2s;
 font-size: 20px;
+line-height: 135%;
 background: none;
 min-height: 100px;
 background-position: bottom right;
@@ -19,14 +24,20 @@ background-repeat: no-repeat;
 }
 
 #newdaypagesection:focus, .daypagesection:focus {
-background: #EDFFFD; /*e3eeff*/
-background-color: #EDFFFD; /*e3eeff*/
+/*background: #EDFFFD; /*e3eeff*/
+background-color: white; /*#EDFFFD; /*e3eeff*/
+border: none;
+box-shadow: none;
 }
 
 #newdaypagesection {
 background-position: bottom right;
 background-repeat: no-repeat;
 }
+
+.sectionhrule{
+border-color: #eee /*#2BBFBD*/;
+margin: 10px 0 10px 0;
 
 #sectioncrib {
 min-height: 600px;
@@ -38,6 +49,12 @@ min-height: 600px;
 #datepickeroutput {
 display: none;
 }
+
+#thisday {
+font-size: 25px !important;
+border: none !important;
+}
+
 #search {
 clear: both;
 border: none;
@@ -49,27 +66,34 @@ border: none;
 {% block body %}
 
 <div class="row">
+
+  <div class="three columns">
+    <input type="text" id="thisday" style="font-size: 25px; border: none; box-shadow: none;">
+
+    <!--
+	<div class="three columns">
+	  <input type="text" id="datepickeroutput" />
+	  <div id="datepicker" ></div>
+	  <h4>Instructions</h4>
+	  <p>Pick a day</p>
+	  <p>Type your notes in a section</p>
+	  <p>Click away to save</p>
+	</div>
+	-->
+
+  </div>
+
+<!-- 
   <div class="nine columns">
     <input type="text" placeholder="Search (forthcoming)" id="search" tabindex="-1"/>    
   </div>
+-->
 
-  <div class="three columns">
-    <h4 id="thisday"></h4>
-  </div>
 </div>
 
 <div class="row">
 
-  <div class="nine columns" id="sectioncrib">
-  </div>
-
-  <div class="three columns">
-    <input type="text" id="datepickeroutput" />
-    <div id="datepicker" ></div>
-    <h4>Instructions</h4>
-    <p>Pick a day</p>
-    <p>Type your notes in a section</p>
-    <p>Click away to save</p>
+  <div class="twelve columns" id="sectioncrib">
   </div>
 
 </div>
@@ -91,7 +115,7 @@ border: none;
   $(document).ready(function() {
 
   var datestring =  thisday.getMonth()+1 + "/" + thisday.getDate() + "/" + thisday.getFullYear();
-  $('#thisday').html(datestring);
+  $('#thisday').val(datestring);
   $('#sectioncrib').empty();
   $('#sectioncrib').load('/ajaxloadsections', {"datestring": datestring}, function(){ 
        autoSize();
@@ -116,7 +140,7 @@ function saveNewSection(event){
             $(event.target).attr("id", data.sectionid);
             $(event.target).attr("class", "daypagesection");
             $(event.target).attr("placeholder", "");
-            $(event.target).parent().append("<textarea id='newdaypagesection' rows=1 placeholder='Add something new to your day' spellcheck='false'></textarea>").fadeIn('250');
+            $(event.target).parent().append("<hr class='sectionhrule' ><textarea id='newdaypagesection' rows=1 placeholder='Add something new to your day' spellcheck='false'></textarea>").fadeIn('250');
             autoSize();
   
             $('#sectioncrib').on('keyup', '#newdaypagesection', function(event) {
@@ -144,41 +168,58 @@ $('#sectioncrib').on('blur', '#newdaypagesection', function(event) {
 });
 
 $('#sectioncrib').on('focus', '.daypagesection, #newdaypagesection', function(event) {
-  $(event.target).css("background-color", "#EDFFFD");
+/*  $(event.target).css("background-color", "#EDFFFD"); */
 });
 
-/* UPDATE SECTION */
-$('#sectioncrib').on('blur', '.daypagesection', function(event) {
-/*  $(event.target).css("background", "#e6e6e6").animate(); */
-  $(event.target).css("background-image", "url('_static/images/saving.png')");
-  $(event.target).css("background-repeat", "no-repeat");
-  $(event.target).css("background-position", "bottom right");  
-  var sectionid = $(event.target).attr("id");
-  var content = $(event.target).val();
+
+function updateSection( target ){
+/*  $(target).css("background", "#e6e6e6").animate(); */
+  $(target).css("background-image", "url('_static/images/saving.png')");
+  $(target).css("background-repeat", "no-repeat");
+  $(target).css("background-position", "bottom right");  
+  var sectionid = $(target).attr("id");
+  var content = $(target).val();
   var datatosend = {sectionid: sectionid, content: content};
   $.post("/jsonupdatesection", datatosend, 
       function(data){
          if (data.response == "1"){
-           $(event.target).css("background", "white");
-           $(event.target).css("background-image", "");
+           $(target).css("background", "white");
+           $(target).css("background-image", "");
          }
          if (data.response == "0"){
-             $(event.target).fadeOut('250', function(){ $(event.target).remove()});
+             $(target).prev().fadeOut('250', function(){ $(target.prev()).remove()});
+             $(target).fadeOut('250', function(){ $(target).remove()});
          }
          }, 'json' );
+}
+
+
+/* UPDATE SECTION */
+$('#sectioncrib').on('blur', '.daypagesection', function(event){
+updateSection(event.target)
+});
+
+/* CTRL-S */
+$(window).keydown(function(event) {
+  if(event.ctrlKey && event.keyCode == 83) { 
+    /* console.log("Hey! Ctrl+S event captured! Update the current section!"); */
+    event.preventDefault(); 
+    updateSection( $( "*:focus" ) );
+  }
 });
 
 $('#search').blur(function() {
   var thisday = new Date();
 });
 
-  $( "#datepicker" ).datepicker({
+/*  $( "#datepicker" ).datepicker({ */
+  $( "#thisday" ).datepicker({
   showOtherMonths: true,
   selectOtherMonths: true,
   onSelect: function(selectedDate){
     thisday = new Date(selectedDate);
     var datestring =  thisday.getMonth()+1 + "/" + thisday.getDate() + "/" + thisday.getFullYear();
-    $('#thisday').html(datestring);
+    $('#thisday').val(datestring);
     $('#sectioncrib').empty();
     $('#sectioncrib').load('/ajaxloadsections', {"datestring": selectedDate}, function(){ autoSize(); });
 /*    setTimeout(autoSize, 200); */
