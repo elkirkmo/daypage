@@ -1,10 +1,21 @@
 <hr class="sectionhrule">
+{% if sections %}
 {% for section in sections %}
 <textarea id="{{ section.key.id }}" class="daypagesection" rows="1" spellcheck='false'>{{ section.content }}</textarea>
-<hr class="sectionhrule">
+{% if not forloop.last %}<hr class="sectionhrule">{% endif %}
 {% endfor %}
 
-<textarea id="newdaypagesection" rows="1" placeholder="Add something new to your day" spellcheck='false'></textarea>
+{% else %}
+
+<textarea id="newdaypagesection" rows="1" placeholder="Start today's page" spellcheck='false'></textarea>
+
+<script>
+$(document).ready( function(){
+$("#newdaypagesection").focus();
+});
+</script>
+
+{% endif %}
 
 <script>
   $('.daypagesection, #newdaypagesection').autosize({append: "\n"});

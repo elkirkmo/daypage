@@ -3,8 +3,12 @@
 
 {% block head %}
 <style>
+
+body div.row #sectionrow {
+min-height: 600px !important;
+}
+
 #newdaypagesection, .daypagesection {
-/*border: 1px #2BBFBD solid; */
 margin: 0;
 border: none;
 outline: none;
@@ -15,8 +19,10 @@ vertical-align: top;
 -webkit-transition: height 0.2s;
 -moz-transition: height 0.2s;
 transition: height 0.2s;
-font-size: 20px;
-line-height: 135%;
+font-size: 22px;
+font-family: Georgia !important;
+color: Black;
+line-height: 34px;
 background: none;
 min-height: 100px;
 background-position: bottom right;
@@ -38,9 +44,6 @@ background-repeat: no-repeat;
 .sectionhrule{
 border-color: #eee /*#2BBFBD*/;
 margin: 10px 0 10px 0;
-
-#sectioncrib {
-min-height: 600px;
 }
 
 #datepicker {
@@ -91,7 +94,7 @@ border: none;
 
 </div>
 
-<div class="row">
+<div class="row" id="sectionrow" style="min-height: 550px;">
 
   <div class="twelve columns" id="sectioncrib">
   </div>
@@ -121,7 +124,6 @@ border: none;
        autoSize();
      });
   $('#sectioncrib').empty();
-  $('#sectioncrib').html("<p>Select a day from the calendar</p>");  
 
 /* CREATE NEW SECTION */
 function saveNewSection(event){
@@ -140,7 +142,7 @@ function saveNewSection(event){
             $(event.target).attr("id", data.sectionid);
             $(event.target).attr("class", "daypagesection");
             $(event.target).attr("placeholder", "");
-            $(event.target).parent().append("<hr class='sectionhrule' ><textarea id='newdaypagesection' rows=1 placeholder='Add something new to your day' spellcheck='false'></textarea>").fadeIn('250');
+            /* $(event.target).parent().append("<hr class='sectionhrule' ><textarea id='newdaypagesection' rows=1 placeholder='Add something new to your day' spellcheck='false'></textarea>").fadeIn('250'); */
             autoSize();
   
             $('#sectioncrib').on('keyup', '#newdaypagesection', function(event) {
@@ -152,7 +154,6 @@ function saveNewSection(event){
 
          }
          }, 'json');
-
 }
 
 $('#sectioncrib').on('keyup', '#newdaypagesection', function(event) {
@@ -217,6 +218,12 @@ $(window).keydown(function(event) {
     console.log("change to the next day");
     event.preventDefault(); 
     $('#thisday').datepicker( "setDate", "+1");
+  }
+  if (event.altKey && event.keyCode == 78){
+    console.log("Load a new section, append it to the crib, set focus. ");
+    $(event.target).parent().append("<hr class='sectionhrule' ><textarea id='newdaypagesection' rows=1 placeholder='A new empty section' spellcheck='false'></textarea>").fadeIn('250');
+    $("#newdaypagesection").focus();
+    autoSize();
   }
 });
 

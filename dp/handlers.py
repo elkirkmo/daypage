@@ -207,7 +207,9 @@ class AjaxLoadSections(webapp2.RequestHandler):
         account = Account.all().filter("user =", user).get()
         month, day, year = self.request.get("datestring").split("/")
         thisday = datetime.date(int(year), int(month), int(day))
-        sections = Section.all().filter("date =", thisday).filter("account =", account).order('date_created').run()
+        sections = Section.all().filter("date =", thisday).filter("account =", account).order('date_created')
+        if sections.count() < 1:
+            sections = None
         values = {
             "response": 1,
             "sections": sections,
