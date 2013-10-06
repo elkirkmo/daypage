@@ -199,18 +199,34 @@ $('#sectioncrib').on('blur', '.daypagesection', function(event){
 updateSection(event.target)
 });
 
-/* CTRL-S */
+
+
+/* Keyboard Shortcuts */
 $(window).keydown(function(event) {
   if(event.ctrlKey && event.keyCode == 83) { 
     /* console.log("Hey! Ctrl+S event captured! Update the current section!"); */
     event.preventDefault(); 
     updateSection( $( "*:focus" ) );
   }
+  if(event.ctrlKey && event.keyCode == 37){
+    console.log("change to the previous date");
+    event.preventDefault(); 
+    $('#thisday').datepicker( "setDate", "-1");
+  }
+  if(event.ctrlKey && event.keyCode == 39){
+    console.log("change to the next day");
+    event.preventDefault(); 
+    $('#thisday').datepicker( "setDate", "+1");
+  }
 });
+
+
 
 $('#search').blur(function() {
   var thisday = new Date();
 });
+
+
 
 /*  $( "#datepicker" ).datepicker({ */
   $( "#thisday" ).datepicker({
@@ -225,6 +241,8 @@ $('#search').blur(function() {
 /*    setTimeout(autoSize, 200); */
   }
   });
+
+
 
   }); /* end document.ready */
 
