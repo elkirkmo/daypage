@@ -220,6 +220,9 @@ $(window).keydown(function(event) {
     event.preventDefault();
     $("#thisday").datepicker("show");
   }
+  if(event.keyCode == 27){
+    $("#thisday").datepicker("hide");
+  }
   if (event.altKey && event.keyCode == 78){
     console.log("Load a new section, append it to the crib, set focus. ");
     $("#sectioncrib").append("<hr class='sectionhrule' ><textarea id='newdaypagesection' rows=1 placeholder='A new empty section' spellcheck='false'></textarea>").fadeIn('250');
